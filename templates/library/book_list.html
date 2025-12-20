@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Список всех книг{% endblock %}
+{% block content %}
+
+<div class="book-list-page">
+  <h1 class="page-title">List of all books</h1>
+
+  <div class="book-list-container">
+    {% for book in books %}
+    <div class="book-item">
+      {% if book.cover %}
+      <div class="book-cover">
+        <img src="{{ book.cover.url }}" alt="Book cover {{ book.title }}">
+      </div>
+      {% else %}
+      <div class="book-cover placeholder">
+        no cover
+      </div>
+      {% endif %}
+
+      <div class="book-info">
+        <h2 class="book-title">
+          <a href="{% url 'library:book_detail' pk=book.pk %}">{{ book.title }}</a>
+        </h2>
+        <p class="book-author">Author: {{ book.author.name }}</p>
+      </div>
+    </div>
+    {% empty %}
+    <p class="empty-text">There are no books in the library yet.</p>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

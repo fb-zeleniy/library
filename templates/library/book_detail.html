@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ book.title }}</h1>
+<p>Author: {{ book.author.name }}</p>
+<p>Genre: {{ book.genre.name }}</p>
+
+{% if book.cover %}
+<img src="{{ book.cover.url }}" alt="Обложка книги {{ book.title }}" style="width: 300px; height: auto;">
+{% endif %}
+
+<h2>Description</h2>
+<p>{{ book.description|linebreaks }}</p>
+
+<h2>Ratings and reviews</h2>
+
+{% if average_rating %}
+    <p>⭐ **Average score:** {{ average_rating|floatformat:1 }} / 5</p>
+{% else %}
+    <p>This book has no ratings yet..</p>
+{% endif %}
+
+{% for review in reviews %}
+    <div class="review-item" style="border: 1px solid #eee; padding: 10px; margin-bottom: 10px;">
+        <p>
+            **User:** {{ review.user.username }}<br>
+            **Estimation:** {{ review.rating }} / 5
+        </p>
+        {% if review.comment %}
+            <p>Feedback: "{{ review.comment }}"</p>
+        {% endif %}
+    </div>
+{% empty %}
+    <p>Be the first to leave a review!</p>
+{% endfor %}
+
+<p><a href="{% url 'library:book_list' %}">← Go back to the list of books</a></p>
+
+L
+
+<h2>Ratings and reviews</h2>
+
+{% if average_rating %}
+    <p>⭐ **Average score:** {{ average_rating|floatformat:1 }} / 5 (based on {{ reviews.count }} scores)</p>
+{% else %}
+    <p>This book has no ratings yet..</p>
+{% endif %}
+
+<h3>Leave a rating</h3>
+
+{% if user.is_authenticated %}
+    {% if has_reviewed %}
+        <p style="color: blue;">You have already appreciated this book.</p>
+    {% else %}
+        <form method="POST">
+            {% csrf_token %} {{ form.as_p }}
+
+            <button type="submit">Send an assessment</button>
+        </form>
+    {% endif %}
+{% else %}
+    <p>Please, <a href="{% url 'login' %}?next={{ request.path }}">login</a>, to rate this book.</p>
+{% endif %}
+
+<hr>
+
+<h3>All ratings:</h3>
+{% for review in reviews %}
+    <div class="review-item" style="border: 1px solid #eee; padding: 10px; margin-bottom: 10px;">
+        <p>
+            **user:** {{ review.user.username }}<br>
+            **Estimation:** ⭐ {{ review.rating }} / 5
+        </p>
+        {% if review.comment %}
+            <p>Feedback: "{{ review.comment }}"</p>
+        {% endif %}
+    </div>
+{% empty %}
+    <p>Be the first to leave a review!</p>
+{% endfor %}
+
+{% endblock %}

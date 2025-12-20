@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Online Library</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <h1 class="logo">
+                <a href="{% url 'library:book_list' %}">Online Library</a>
+            </h1>
+            <nav class="main-nav">
+                <a href="{% url 'library:book_list' %}">Books</a>
+
+                {% if user.is_authenticated %}
+                    <a href="{% url 'accounts:profile' %}">Profile ({{ user.username }})</a>
+                    <form action="{% url 'accounts:logout' %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'accounts:login' %}">Login</a>
+                    <a href="{% url 'accounts:register' %}">Registration</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="msg {{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            © Online Library
+
+            <div class="footer-socials">
+                <a href="https://www.instagram.com/f.b._zeleniy/" target="_blank" class="social-link instagram">
+                    <img src="{% static 'images/icons/instagram_logo.png' %}" alt="Instagram">
+
+                </a>
+                <a href="https://t.me/fb_zeleniy" target="_blank" class="social-link telegram">
+                    <img src="{% static 'images/icons/telegram_logo.png' %}" alt="Telegram">
+
+                </a>
+                <a href="https://github.com/fb-zeleniy" target="_blank" class="social-link github">
+                    <img src="{% static 'images/icons/github_logo.png' %}" alt="GitHub">
+
+                </a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

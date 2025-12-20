@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Профиль пользователя{% endblock %}
+
+{% block content %}
+    <div class="profile-container">
+        <h2>Profile</h2>
+
+        <div class="profile-details">
+            <p>
+                <strong>Nickname:</strong>
+                <span class="user-data">{{ user.username }}</span>
+            </p>
+
+            <p>
+                <strong>Password:</strong>
+                <span class="user-data password-field" style="color: #666; font-size: 1.2em;">
+                    **********
+                </span>
+                <span style="display: block; font-size: 0.8em; color: red; margin-top: 5px;">
+                    (The password is always hidden for security reasons.)
+                </span>
+            </p>
+        </div>
+    </div>
+{% endblock %}
